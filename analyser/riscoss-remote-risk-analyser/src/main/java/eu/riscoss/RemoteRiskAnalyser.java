@@ -24,11 +24,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
+import java.io.InputStream;
+import java.io.FileInputStream;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
 import eu.riscoss.reasoner.ReasoningLibrary;
 import eu.riscoss.reasoner.RiskAnalysisEngine;
@@ -328,7 +331,7 @@ public class RemoteRiskAnalyser
                 out.put("warnings", new JSONArray(warnings));
                 Map<String, Map<String, Object>> m = runAnalysis(engine);
                 // use net.sf.json for this particular field to preserve backward compat behavior.
-                out.put("result", new JSONObject(m));
+                out.put("result", new JSONObject(m)); 
             }
         }
     }
@@ -360,7 +363,11 @@ public class RemoteRiskAnalyser
             JSONArray models = new JSONArray();
             String[] modelsArray = modelFilesStr.split(",");
             for (int i = 0; i < modelsArray.length; i++) {
-                models.put(FileUtils.readFileToString(new File(modelsArray[i]), "UTF-8"));
+                InputStream is = new FileInputStream(new File(modelsArray[i]));
+                if (modelsArray[i].endsWith(".gz")) {
+                    is = new GzipCompressorInputStream(is);
+                }
+                models.put(IOUtils.toString(is, "UTF-8"));
             }
             request.put("riskModels", models);
         } else {

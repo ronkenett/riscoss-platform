@@ -59,6 +59,12 @@
     </dependency>
 
     <dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-compress</artifactId>
+	    <version>1.9</version>
+    </dependency>
+
+    <dependency>
       <groupId>eu.riscoss</groupId>
       <artifactId>riscoss-platform-risk-analyser</artifactId>
       <version>0.24-SNAPSHOT</version>
