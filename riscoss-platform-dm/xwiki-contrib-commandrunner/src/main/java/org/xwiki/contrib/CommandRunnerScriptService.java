@@ -21,6 +21,8 @@ package org.xwiki.contrib;
 
 import java.io.OutputStream;
 import java.io.InputStream;
+import java.io.File;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -70,7 +72,10 @@ public class CommandRunnerScriptService implements ScriptService
         return t;
     }
 
-    private static CmdReturn runCmd(final String cmd, final String stdin, long timeoutMillis)
+    private static CmdReturn runCmd(final String cmd,
+                                    final String stdin,
+                                    long timeoutMillis,
+                                    final String wrkDir)
         throws Exception
     {
         //System.out.println("debug: " + cmd + " < " + stdin);
@@ -80,7 +85,8 @@ public class CommandRunnerScriptService implements ScriptService
         final Process[] process = new Process[1];
 
         startThread(ai, new Func() { void call() throws Exception {
-            process[0] = Runtime.getRuntime().exec(cmd);
+            process[0] =
+                new ProcessBuilder(Arrays.asList(cmd.split(" "))).directory(new File(wrkDir)).start();
             startThread(ai, new Func() { void call() throws Exception {
                 out.stdout = IOUtils.toString(process[0].getInputStream(), "UTF-8");
             }});
@@ -118,7 +124,7 @@ public class CommandRunnerScriptService implements ScriptService
         return out;
     }
 
-    public Map<String, String> run(String command, String stdin, long timeoutMillis)
+    public Map<String, String> run(String command, String stdin, long timeoutMillis, String wrkDir)
         throws Exception
     {
         Map<String, String> outMap = new HashMap<String, String>();
@@ -127,7 +133,7 @@ public class CommandRunnerScriptService implements ScriptService
             return outMap;
         }
 
-        CmdReturn out = runCmd(command, stdin, timeoutMillis);
+        CmdReturn out = runCmd(command, stdin, timeoutMillis, wrkDir);
         outMap.put("stdout", out.stdout);
         outMap.put("stderr", out.stderr);
         if (out.retCode == CmdReturn.retCode_TIMEOUT) {
@@ -138,5 +144,11 @@ public class CommandRunnerScriptService implements ScriptService
         }
         outMap.put("ret", ""+out.retCode);
         return outMap;
+    }
+
+    public Map<String, String> run(String command, String stdin, long timeoutMillis)
+        throws Exception
+    {
+        return run(command, stdin, timeoutMillis, System.getProperty("user.dir"));
     }
 }
