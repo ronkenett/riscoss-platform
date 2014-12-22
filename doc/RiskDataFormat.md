@@ -36,6 +36,7 @@ Rules for running data collection to perform risk analysis:
 
 ### KPA ENDS 12/19/2014
 
+### begin See ALBERTOs version
 ## NUMBER
 
 `NUMBER` is a simple integer or decimal value based on it's meaning.
@@ -55,3 +56,43 @@ An `EVIDENCE` data type is made up of six discrete components:
 * **conflict**: No idea what this is TODO
 * **negative**: No idea what this is TODO
 * **positive**: No idea what this is TODO
+ 
+### End See ALBERTOs version
+
+### Mirko 22.12.
+#Risk data "architecture"
+
+The architecture in short:
+* The risk models contain, as the lowest level, the "indicators".
+* These indicators need to appear in the Risk Data Repository (RDR)
+* The RDR is filled from independent programs called Risk Data Collectors (RDC)
+* The RDCs have thus the task to load correctly formatted and computed data into the RDR. 
+* This data can be obtained from single or multiple measures, statistics, other databases, etc., i.e. a RDC can directly monitor data, or alternatively rely on some database which may be in- or outside the RISCOSS boundary. E.g. there could be some tool (which could be an RDC, too) which creates a local database of JIRA issue metadata, which is queried by an RDC to create the requested combined measures. Also, a RDC could read data from RDR to compute new indicators.
+* The RDR should *not* be misused as a database of high numbers of measures that are not used as indicators.
+* Who creates a risk model needs to ensure that indicators are available.
+* A more complex protocol for synchronising RDCs (RDR) and the models used for evaluation is not yet elaborated.
+
+#Documentation of Risk Data instances
+Data currently available for OW2 use cases - spreadsheet by Cedric (OW2) and Ron (KPA): https://docs.google.com/spreadsheets/d/1tR7v82N2Q13TGhS4CkQPcFT4GxcET4zR_AWjA75HSk8/edit?usp=sharing
+
+The risk data measures presented in this spreadsheet are quite self explaining. All the data used for now can be obtained one-shot, i.e. by looking at a single (e.g. the current) time. This would not be the case for other measures like "commits on a holiday" or "new issues created" would need a temporal interval for computation of a single value, i.e. 1 week, 1 year, etc., and another, much larger, interval for creating a distribution. If this is the case, the according documentation needs to be added; a currently used, correct example is: *DS.4.b	Contributors in the last 12 months*.
+
+1) Fossology data: 
+ok
+
+2) Sonar data:
+there is a lot of data available. The actual provider gives various examples, and is configurable by properties (see the original .properties files).
+
+3) OMM: 
+"Number of 1 in" ... means the number of "1" in the evaluation form.
+
+4) JIRA:
+not contained in the actual spreadsheet, but prepares already the data needed by the older KPA activeness network.
+
+
+
+Information on the original risk data providers and on the data currently available on the Risk Data Repository (RDR)
+https://drive.google.com/file/d/0BycHQRiKncxHYnA5TEVlelVxU1k/view?usp=sharing
+
+
+
