@@ -223,12 +223,12 @@ public class RemoteRiskAnalyser
             Map<String, Object> item = new HashMap<String, Object>();
             Field descriptionField = riskAnalysisEngine.getField(chunk, FieldType.DESCRIPTION);
             if (descriptionField != null) {
-                item.put("DESCRIPTION", riskAnalysisEngine.getField(chunk, FieldType.DESCRIPTION).getValue());
+                item.put("description", riskAnalysisEngine.getField(chunk, FieldType.DESCRIPTION).getValue());
             } else {
-                item.put("DESCRIPTION", chunk.getId());
+                item.put("description", chunk.getId());
             }
-            item.put("TYPE", field.getDataType().toString());
-            item.put("VALUE", field.getValue());
+            item.put("type", field.getDataType().toString());
+            item.put("value", field.getValue());
 
             result.put(chunk.getId(), item);
         }
