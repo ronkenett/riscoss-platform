@@ -242,7 +242,15 @@ public class RemoteRiskAnalyser
         for (String key : JSONObject.getNames(obj)) {
             JSONObject entryObj = obj.getJSONObject(key);
             String type = entryObj.getString("type");
-            if ("DISTRIBUTION".equals(type) || "EVIDENCE".equals(type)) {
+            if ("DISTRIBUTION".equals(type)) {
+                JSONObject valueObj = entryObj.getJSONObject("value");
+                JSONArray arr = valueObj.getJSONArray("values");
+                String[] x = new String[arr.length()];
+                for (int i = 0; i < x.length; i++) {
+                    x[i] = arr.get(i).toString();
+                }
+                out.put(key, x);
+            } else if ("EVIDENCE".equals(type)) {
                 JSONArray arr = entryObj.getJSONArray("value");
                 String[] x = new String[arr.length()];
                 for (int i = 0; i < x.length; i++) {
